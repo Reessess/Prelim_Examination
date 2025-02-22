@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(WeatherApp());
+  runApp(const WeatherApp());
 }
 
 class WeatherApp extends StatelessWidget {
@@ -11,7 +11,7 @@ class WeatherApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: WeatherScreen(),
+      home: const WeatherScreen(),
     );
   }
 }
@@ -22,48 +22,60 @@ class WeatherScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.grey.shade200, // Light grey background
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(height: 40),
-            Text(
+            const SizedBox(height: 40),
+            const Text(
               'Weather',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                fontSize: 26,
+                fontWeight: FontWeight.bold,
+                color: Colors.black87,
+              ),
             ),
-            SizedBox(height: 20),
-            WeatherCard(
+            const SizedBox(height: 20),
+            const WeatherCard(
+              title: 'Current location',
               location: 'Dhaka',
               condition: 'Thunder',
               temperature: '20°C',
-              icon: Icons.thunderstorm,
-              isHighlighted: true,
+              iconPath: 'assets/thunder.png',
+              isHighlighted: true, // Special highlight for current location
             ),
-            SizedBox(height: 20),
-            Text(
+            const SizedBox(height: 20),
+            const Text(
               'Around the world',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Colors.black87,
+              ),
             ),
-            SizedBox(height: 10),
-            WeatherCard(
+            const SizedBox(height: 10),
+            const WeatherCard(
+              title: 'United States',
               location: 'California',
               condition: 'Clear',
               temperature: '6°C',
-              icon: Icons.wb_sunny,
+              iconPath: 'assets/sunny.png',
             ),
-            WeatherCard(
+            const WeatherCard(
+              title: 'China',
               location: 'Beijing',
               condition: 'Mostly Sunny',
               temperature: '5°C',
-              icon: Icons.wb_sunny_outlined,
+              iconPath: 'assets/sunny.png',
             ),
-            WeatherCard(
+            const WeatherCard(
+              title: 'Russia',
               location: 'Moscow',
               condition: 'Cloudy',
               temperature: '-4°C',
-              icon: Icons.cloud,
+              iconPath: 'assets/snow.png',
             ),
           ],
         ),
@@ -73,60 +85,91 @@ class WeatherScreen extends StatelessWidget {
 }
 
 class WeatherCard extends StatelessWidget {
+  final String title;
   final String location;
   final String condition;
   final String temperature;
-  final IconData icon;
+  final String iconPath;
   final bool isHighlighted;
 
-  const WeatherCard({super.key, 
+  const WeatherCard({
+    super.key,
+    required this.title,
     required this.location,
     required this.condition,
     required this.temperature,
-    required this.icon,
+    required this.iconPath,
     this.isHighlighted = false,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 5),
-      padding: EdgeInsets.all(16),
+      margin: const EdgeInsets.symmetric(vertical: 8),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: isHighlighted ? Colors.purple : Colors.deepPurple.shade300,
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                location,
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
-              ),
-              Text(
-                condition,
-                style: TextStyle(fontSize: 14, color: Colors.white70),
-              ),
-            ],
+        color: isHighlighted ? Colors.purple.shade700 : Colors.deepPurple.shade400,
+        borderRadius: BorderRadius.circular(20), // Rounded edges
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            blurRadius: 8,
+            offset: const Offset(0, 4),
           ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            title,
+            style: const TextStyle(fontSize: 14, color: Colors.white70),
+          ),
+          const SizedBox(height: 5),
           Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Icon(icon, color: Colors.white, size: 30),
-              SizedBox(width: 10),
-              Text(
-                temperature,
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    location,
+                    style: const TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    condition,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      color: Colors.white70,
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                children: [
+                  Image.asset(
+                    iconPath,
+                    width: 40,
+                    height: 40,
+                    fit: BoxFit.contain,
+                    errorBuilder: (context, error, stackTrace) =>
+                    const Icon(Icons.error, color: Colors.white),
+                  ),
+                  const SizedBox(width: 10),
+                  Text(
+                    temperature,
+                    style: const TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
